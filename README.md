@@ -228,11 +228,11 @@ MIT
 
 ## Vercel 部署
 
-本项目支持在 Vercel 上无服务器(Serverless)部署，已在 `frontend/api/` 目录新增 Vercel Functions，并使用 Vercel KV 持久化数据。
+本项目支持在 Vercel 上无服务器(Serverless)部署，已在 `frontend/api/` 目录新增 Vercel Functions，并使用 Upstash 持久化数据。
 
 ### 部署前准备
 
-- 在 Vercel 项目中启用 KV（或改为 Blob 存储，自行适配 `frontend/api/_lib/storage.js`）。
+- 在 vercel 面板中找到 Storage 选项卡，点击 Create Database 按钮选择 Upstash for Redis，创建之后去 upstash 面板拿 UPSTASH_REDIS_REST_URL 和 UPSTASH_REDIS_REST_TOKEN
 - 在 Vercel → Settings → Environment Variables 配置以下环境变量：
   - 交易所凭证：
     - `OKX_API_KEY`, `OKX_API_SECRET`, `OKX_API_PASSPHRASE`, `OKX_API_PROJECT`
@@ -241,7 +241,6 @@ MIT
     - `GATE_API_KEY`, `GATE_API_SECRET`
     - `BITGET_API_KEY`, `BITGET_API_SECRET`, `BITGET_API_PASSPHRASE`
   - 通用可选：`API_TIMEOUT`（默认 15000）
-  - KV 相关：绑定 Vercel KV 后按向导提示（通常无需手工设置）
 
 ### 目录与路由
 

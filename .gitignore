@@ -37,3 +37,5 @@ Thumbs.db
 # 缓存
 .npm
 .eslintcache
+
+CLAUDE.md

@@ -1,0 +1,16 @@
+{
+	"name": "exchange-info-query",
+	"private": true,
+	"workspaces": [
+		"frontend"
+	],
+	"scripts": {
+		"build": "cd frontend && npm run build",
+		"start": "cd frontend && npm start"
+	},
+	"dependencies": {
+		"@vercel/kv": "^1.0.1"
+	}
+}
+
+

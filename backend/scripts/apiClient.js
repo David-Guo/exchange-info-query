@@ -7,7 +7,7 @@ const axios = require('axios');
 const crypto = require('crypto');
 const fs = require('fs').promises;
 const path = require('path');
-require('dotenv').config({ path: '../../.env' });
+require('dotenv').config({ path: path.join(__dirname, '../../.env') });
 
 class ApiClient {
   /**

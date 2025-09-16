@@ -6,7 +6,7 @@ const express = require('express');
 const path = require('path');
 const fs = require('fs').promises;
 const Scheduler = require('./scripts/scheduler');
-require('dotenv').config({ path: '../.env' });
+require('dotenv').config({ path: path.join(__dirname, '../.env') });
 
 // 创建Express应用
 const app = express();

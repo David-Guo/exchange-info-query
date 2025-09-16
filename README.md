@@ -225,3 +225,62 @@ GET /api/last_update
 ## 许可证
 
 MIT
+
+## Vercel 部署
+
+本项目支持在 Vercel 上无服务器(Serverless)部署，已在 `frontend/api/` 目录新增 Vercel Functions，并使用 Vercel KV 持久化数据。
+
+### 部署前准备
+
+- 在 Vercel 项目中启用 KV（或改为 Blob 存储，自行适配 `frontend/api/_lib/storage.js`）。
+- 在 Vercel → Settings → Environment Variables 配置以下环境变量：
+  - 交易所凭证：
+    - `OKX_API_KEY`, `OKX_API_SECRET`, `OKX_API_PASSPHRASE`, `OKX_API_PROJECT`
+    - `BINANCE_API_KEY`, `BINANCE_API_SECRET`
+    - `BYBIT_API_KEY`, `BYBIT_API_SECRET`
+    - `GATE_API_KEY`, `GATE_API_SECRET`
+    - `BITGET_API_KEY`, `BITGET_API_SECRET`, `BITGET_API_PASSPHRASE`
+  - 通用可选：`API_TIMEOUT`（默认 15000）
+  - KV 相关：绑定 Vercel KV 后按向导提示（通常无需手工设置）
+
+### 目录与路由
+
+- 前端根目录：`frontend`
+- Serverless API：`frontend/api/`
+  - `GET /api/last_update`
+  - `GET /api/tokens`
+  - `GET /api/status?symbol=BTC`
+  - `POST /api/refresh`
+  - `GET /api/cron/collect`（供 Vercel Cron 调用）
+
+### 构建与发布
+
+1. 在 Vercel 导入本仓库，Project Root 选择 `frontend`。
+2. Vercel 将基于 `frontend/package.json` 自动安装与构建。
+3. 部署完成后，前端默认请求同域 `/api`。
+
+### 定时任务（Vercel Cron）
+
+在 Vercel 项目 → Settings → Cron Jobs 增加任务：
+
+- Endpoint: `/api/cron/collect`
+- Schedule: `5 * * * *`（每小时第 5 分钟）
+
+> 提示：Serverless 函数有执行时长限制（已在 `frontend/vercel.json` 设置 `maxDuration: 60`）。如并发抓取耗时过长，建议减少并发、缩短超时或升级方案。
+
+### 本地开发（可选）
+
+```bash
+cd frontend
+npm install
+npm start
+# 或使用 Vercel CLI 启动本地函数
+npm i -g vercel
+vercel dev
+```
+
+### 迁移说明
+
+- Express 与 `node-cron` 不再需要；路由与定时改用 Vercel Functions 与 Vercel Cron。
+- 生产环境不再写入本地文件 `backend/data/exchange_data.json`，改为 Vercel KV。
+- 原始 API 响应在无服务器场景下未持久化，如需保留可扩展写入 KV/Blob。

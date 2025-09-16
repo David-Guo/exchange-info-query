@@ -9,7 +9,7 @@
 		"start": "cd frontend && npm start"
 	},
 	"dependencies": {
-		"@vercel/kv": "^1.0.1"
+		"@upstash/redis": "^1.28.2"
 	}
 }
 
